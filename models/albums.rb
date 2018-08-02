@@ -13,9 +13,22 @@ class Album
   def save()
     sql = "INSERT INTO albums (title, genre, artist_id)
           VALUES ($1, $2, $3)
-          RETURNING id"
+          RETURNING id;"
     values = [@title, @genre, @artist_id]
     @id = SqlRunner.run(sql, values)[0]['id'].to_i
   end
+
+  def Album.all()
+    sql = "SELECT * FROM artists;"
+    artists = SqlRunner.run(sql)
+    return albums.map{|album| Album.new(album)}
+  end
+
+
+  def Album.delete_all()
+    SqlRunner.run("DELETE FROM albums;")
+  end
+
+
 
 end
